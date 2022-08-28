@@ -20,44 +20,51 @@ function App() {
       objectID: 1,
     },
   ];
+
   const [searchTerm, setSearchTerm] = useState("");
-  const searchStory = stories.filter((item) =>
-    item.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
+
+  const searchStories = stories.filter(item =>
+    item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const Search = (props) => {
+  const Search = ({search,onSearch}) => {
+    return (
     <div>
       <label htmlFor="search">Search: </label>
-      # leanpub-start-insert
-      <input id="search" type="text" onChange={props.onSearch} />#
-      leanpub-end-insert
-    </div>;
+      <input id="search" type="text" value={search} onChange={onSearch} />
+    </div>)
   };
+
+  const handleChange=(e)=>{
+    setSearchTerm(e.target.value);
+  }
+
+  
+
   const List = ({ list }) => {
+    return(
     <ul>
       {list.map((item) => (
-        <Item key={item} item={item.objectID} />
+        <Item key={item.objectID} item={item} />
       ))}
-    </ul>;
+    </ul>);
   };
 
   const Item = ({ item }) => {
     return (
-      <li key={item.objectID}>
-        <span>
-          <a href={item.url}>{item.title}</a>
-        </span>
-        <span>{item.author}</span>
-        <span>{item.num_comments}</span>
-        <span>{item.points}</span>
-      </li>
+      <ul key={item.objectID}>
+        
+        <li>{item.author}</li>
+        <li>{item.title}</li>
+        <li>{item.url}</li>
+      </ul>
     );
   };
 
   return (
     <div className="App">
-      <Search onChange={searchStory} />
-      <List list={stories} />
+      <Search  search={searchTerm} onSearch={handleChange}/>
+      <List list={searchStories} />
     </div>
   );
 }
